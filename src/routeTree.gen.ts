@@ -10,33 +10,245 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AboutRouteImport } from './routes/about'
+import { Route as BookingRouteImport } from './routes/booking'
+import { Route as CartRouteImport } from './routes/cart'
+import { Route as CheckoutRouteImport } from './routes/checkout'
+import { Route as ConsultationRouteImport } from './routes/consultation'
+import { Route as ContactRouteImport } from './routes/contact'
+import { Route as FaqRouteImport } from './routes/faq'
+import { Route as PrivacyRouteImport } from './routes/privacy'
+import { Route as QuoteRouteImport } from './routes/quote'
+import { Route as TermsRouteImport } from './routes/terms'
+import { Route as BlogIndexRouteImport } from './routes/blog.index'
+import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
+import { Route as ServicesIndexRouteImport } from './routes/services.index'
+import { Route as ServicesSlugRouteImport } from './routes/services.$slug'
+import { Route as StoreIndexRouteImport } from './routes/store.index'
+import { Route as StoreSlugRouteImport } from './routes/store.$slug'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BookingRoute = BookingRouteImport.update({
+  id: '/booking',
+  path: '/booking',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CartRoute = CartRouteImport.update({
+  id: '/cart',
+  path: '/cart',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CheckoutRoute = CheckoutRouteImport.update({
+  id: '/checkout',
+  path: '/checkout',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ConsultationRoute = ConsultationRouteImport.update({
+  id: '/consultation',
+  path: '/consultation',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FaqRoute = FaqRouteImport.update({
+  id: '/faq',
+  path: '/faq',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const QuoteRoute = QuoteRouteImport.update({
+  id: '/quote',
+  path: '/quote',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TermsRoute = TermsRouteImport.update({
+  id: '/terms',
+  path: '/terms',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BlogIndexRoute = BlogIndexRouteImport.update({
+  id: '/blog/',
+  path: '/blog/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BlogSlugRoute = BlogSlugRouteImport.update({
+  id: '/blog/$slug',
+  path: '/blog/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ServicesIndexRoute = ServicesIndexRouteImport.update({
+  id: '/services/',
+  path: '/services/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ServicesSlugRoute = ServicesSlugRouteImport.update({
+  id: '/services/$slug',
+  path: '/services/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StoreIndexRoute = StoreIndexRouteImport.update({
+  id: '/store/',
+  path: '/store/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StoreSlugRoute = StoreSlugRouteImport.update({
+  id: '/store/$slug',
+  path: '/store/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/booking': typeof BookingRoute
+  '/cart': typeof CartRoute
+  '/checkout': typeof CheckoutRoute
+  '/consultation': typeof ConsultationRoute
+  '/contact': typeof ContactRoute
+  '/faq': typeof FaqRoute
+  '/privacy': typeof PrivacyRoute
+  '/quote': typeof QuoteRoute
+  '/terms': typeof TermsRoute
+  '/blog/$slug': typeof BlogSlugRoute
+  '/services/$slug': typeof ServicesSlugRoute
+  '/store/$slug': typeof StoreSlugRoute
+  '/blog/': typeof BlogIndexRoute
+  '/services/': typeof ServicesIndexRoute
+  '/store/': typeof StoreIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/booking': typeof BookingRoute
+  '/cart': typeof CartRoute
+  '/checkout': typeof CheckoutRoute
+  '/consultation': typeof ConsultationRoute
+  '/contact': typeof ContactRoute
+  '/faq': typeof FaqRoute
+  '/privacy': typeof PrivacyRoute
+  '/quote': typeof QuoteRoute
+  '/terms': typeof TermsRoute
+  '/blog/$slug': typeof BlogSlugRoute
+  '/services/$slug': typeof ServicesSlugRoute
+  '/store/$slug': typeof StoreSlugRoute
+  '/blog': typeof BlogIndexRoute
+  '/services': typeof ServicesIndexRoute
+  '/store': typeof StoreIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/booking': typeof BookingRoute
+  '/cart': typeof CartRoute
+  '/checkout': typeof CheckoutRoute
+  '/consultation': typeof ConsultationRoute
+  '/contact': typeof ContactRoute
+  '/faq': typeof FaqRoute
+  '/privacy': typeof PrivacyRoute
+  '/quote': typeof QuoteRoute
+  '/terms': typeof TermsRoute
+  '/blog/$slug': typeof BlogSlugRoute
+  '/services/$slug': typeof ServicesSlugRoute
+  '/store/$slug': typeof StoreSlugRoute
+  '/blog/': typeof BlogIndexRoute
+  '/services/': typeof ServicesIndexRoute
+  '/store/': typeof StoreIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/booking'
+    | '/cart'
+    | '/checkout'
+    | '/consultation'
+    | '/contact'
+    | '/faq'
+    | '/privacy'
+    | '/quote'
+    | '/terms'
+    | '/blog/$slug'
+    | '/services/$slug'
+    | '/store/$slug'
+    | '/blog/'
+    | '/services/'
+    | '/store/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/about'
+    | '/booking'
+    | '/cart'
+    | '/checkout'
+    | '/consultation'
+    | '/contact'
+    | '/faq'
+    | '/privacy'
+    | '/quote'
+    | '/terms'
+    | '/blog/$slug'
+    | '/services/$slug'
+    | '/store/$slug'
+    | '/blog'
+    | '/services'
+    | '/store'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/booking'
+    | '/cart'
+    | '/checkout'
+    | '/consultation'
+    | '/contact'
+    | '/faq'
+    | '/privacy'
+    | '/quote'
+    | '/terms'
+    | '/blog/$slug'
+    | '/services/$slug'
+    | '/store/$slug'
+    | '/blog/'
+    | '/services/'
+    | '/store/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AboutRoute: typeof AboutRoute
+  BookingRoute: typeof BookingRoute
+  CartRoute: typeof CartRoute
+  CheckoutRoute: typeof CheckoutRoute
+  ConsultationRoute: typeof ConsultationRoute
+  ContactRoute: typeof ContactRoute
+  FaqRoute: typeof FaqRoute
+  PrivacyRoute: typeof PrivacyRoute
+  QuoteRoute: typeof QuoteRoute
+  TermsRoute: typeof TermsRoute
+  BlogSlugRoute: typeof BlogSlugRoute
+  ServicesSlugRoute: typeof ServicesSlugRoute
+  StoreSlugRoute: typeof StoreSlugRoute
+  BlogIndexRoute: typeof BlogIndexRoute
+  ServicesIndexRoute: typeof ServicesIndexRoute
+  StoreIndexRoute: typeof StoreIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +260,139 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/booking': {
+      id: '/booking'
+      path: '/booking'
+      fullPath: '/booking'
+      preLoaderRoute: typeof BookingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cart': {
+      id: '/cart'
+      path: '/cart'
+      fullPath: '/cart'
+      preLoaderRoute: typeof CartRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/checkout': {
+      id: '/checkout'
+      path: '/checkout'
+      fullPath: '/checkout'
+      preLoaderRoute: typeof CheckoutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/consultation': {
+      id: '/consultation'
+      path: '/consultation'
+      fullPath: '/consultation'
+      preLoaderRoute: typeof ConsultationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/faq': {
+      id: '/faq'
+      path: '/faq'
+      fullPath: '/faq'
+      preLoaderRoute: typeof FaqRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/quote': {
+      id: '/quote'
+      path: '/quote'
+      fullPath: '/quote'
+      preLoaderRoute: typeof QuoteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/terms': {
+      id: '/terms'
+      path: '/terms'
+      fullPath: '/terms'
+      preLoaderRoute: typeof TermsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/blog/': {
+      id: '/blog/'
+      path: '/blog'
+      fullPath: '/blog/'
+      preLoaderRoute: typeof BlogIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/blog/$slug': {
+      id: '/blog/$slug'
+      path: '/blog/$slug'
+      fullPath: '/blog/$slug'
+      preLoaderRoute: typeof BlogSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/services/': {
+      id: '/services/'
+      path: '/services'
+      fullPath: '/services/'
+      preLoaderRoute: typeof ServicesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/services/$slug': {
+      id: '/services/$slug'
+      path: '/services/$slug'
+      fullPath: '/services/$slug'
+      preLoaderRoute: typeof ServicesSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/store/': {
+      id: '/store/'
+      path: '/store'
+      fullPath: '/store/'
+      preLoaderRoute: typeof StoreIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/store/$slug': {
+      id: '/store/$slug'
+      path: '/store/$slug'
+      fullPath: '/store/$slug'
+      preLoaderRoute: typeof StoreSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AboutRoute: AboutRoute,
+  BookingRoute: BookingRoute,
+  CartRoute: CartRoute,
+  CheckoutRoute: CheckoutRoute,
+  ConsultationRoute: ConsultationRoute,
+  ContactRoute: ContactRoute,
+  FaqRoute: FaqRoute,
+  PrivacyRoute: PrivacyRoute,
+  QuoteRoute: QuoteRoute,
+  TermsRoute: TermsRoute,
+  BlogSlugRoute: BlogSlugRoute,
+  ServicesSlugRoute: ServicesSlugRoute,
+  StoreSlugRoute: StoreSlugRoute,
+  BlogIndexRoute: BlogIndexRoute,
+  ServicesIndexRoute: ServicesIndexRoute,
+  StoreIndexRoute: StoreIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
