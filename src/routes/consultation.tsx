@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
+import { useSubmit } from "@/lib/use-submit";
 import { Container, PageHero, Field, Success, meta } from "@/components/site";
 
 export const Route = createFileRoute("/consultation")({
@@ -10,14 +11,14 @@ export const Route = createFileRoute("/consultation")({
 const types = ["استشارة منزلية", "استشارة للمنشآت التجارية", "استشارة للمطاعم والفنادق", "استشارة للمصانع والمخازن", "استشارة عن نوع حشرة أو آفة", "استشارة حول منتج مكافحة آفات"];
 
 function Consultation() {
-  const [done, setDone] = useState(false);
   const [type, setType] = useState(types[0]);
+  const { done, loading, error, onSubmit } = useSubmit("consultation", () => ({ "نوع الاستشارة": type }));
   return (
     <>
       <PageHero eyebrow="استشر الدكتور" title="استشارة متخصصة لمشكلتك" subtitle="صف المشكلة وأرفق صورًا أو فيديو، وسيتواصل معك الدكتور بالتشخيص والحل المناسب." />
       <Container className="py-16">
         {done ? <Success title="تم استلام طلب الاستشارة" text="سيراجع الدكتور طلبك ويتواصل معك في أقرب وقت عبر الوسيلة المفضلة." /> : (
-          <form onSubmit={(e) => { e.preventDefault(); setDone(true); }} className="card-soft mx-auto max-w-4xl p-6 md:p-10">
+          <form onSubmit={onSubmit} className="card-soft mx-auto max-w-4xl p-6 md:p-10">
             <p className="mb-3 font-bold">نوع الاستشارة</p>
             <div className="mb-8 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
               {types.map((t) => (
@@ -38,7 +39,7 @@ function Consultation() {
               <Field label="الموعد المفضل"><input type="datetime-local" className="field" /></Field>
               <label className="flex items-center gap-2 rounded-xl bg-warning-soft p-3 font-bold text-warning md:col-span-2"><input type="checkbox" className="size-4 accent-current" />أريد استشارة عاجلة</label>
             </div>
-            <button className="btn btn-primary mt-8 w-full">إرسال طلب الاستشارة</button>
+            {error && <p className="mt-6 text-sm font-semibold text-destructive">{error}</p>}<button disabled={loading} className="btn btn-primary mt-8 w-full">{loading ? "جارٍ الإرسال..." : "إرسال طلب الاستشارة"}</button>
           </form>
         )}
       </Container>

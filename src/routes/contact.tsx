@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useSubmit } from "@/lib/use-submit";
 import { Phone, Mail, MapPin, MessageCircle } from "lucide-react";
 import { SITE, waLink } from "@/lib/data";
 import { Container, PageHero, Field, Success, meta } from "@/components/site";
@@ -10,7 +10,7 @@ export const Route = createFileRoute("/contact")({
 });
 
 function Contact() {
-  const [done, setDone] = useState(false);
+  const { done, loading, error, onSubmit } = useSubmit("contact");
   return (
     <>
       <PageHero eyebrow="تواصل" title="تواصل معنا" subtitle="نسعد بالرد على استفساراتك في أسرع وقت." />
@@ -23,12 +23,12 @@ function Contact() {
         </div>
         <div className="lg:col-span-2">
           {done ? <Success title="تم إرسال رسالتك" text="سنتواصل معك قريبًا." /> : (
-            <form onSubmit={(e) => { e.preventDefault(); setDone(true); }} className="card-soft grid gap-5 p-6 md:grid-cols-2">
+            <form onSubmit={onSubmit} className="card-soft grid gap-5 p-6 md:grid-cols-2">
               <Field label="الاسم"><input required className="field" /></Field>
               <Field label="الهاتف"><input required type="tel" className="field" /></Field>
               <Field label="البريد الإلكتروني" full><input type="email" className="field" /></Field>
               <Field label="الرسالة" full><textarea required rows={5} className="field" /></Field>
-              <button className="btn btn-primary md:col-span-2">إرسال</button>
+              {error && <p className="text-sm font-semibold text-destructive md:col-span-2">{error}</p>}<button disabled={loading} className="btn btn-primary md:col-span-2">{loading ? "جارٍ الإرسال..." : "إرسال"}</button>
             </form>
           )}
         </div>
