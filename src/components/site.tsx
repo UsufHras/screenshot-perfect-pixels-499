@@ -1,8 +1,9 @@
 import { Link } from "@tanstack/react-router";
-import { useState, type ReactNode } from "react";
-import { Menu, X, ShoppingCart, Phone, Mail, MapPin, CheckCircle2, MessageCircle, Bug } from "lucide-react";
+import { useEffect, useState, type ReactNode } from "react";
+import { Menu, X, ShoppingCart, Phone, Mail, MapPin, CheckCircle2, MessageCircle, Bug, LayoutDashboard, LogIn } from "lucide-react";
 import { SITE, waLink } from "@/lib/data";
 import { useCart } from "@/lib/cart";
+import { supabase } from "@/integrations/supabase/client";
 
 const nav = [
   { to: "/", label: "الرئيسية" },
