@@ -47,6 +47,9 @@ export function Header() {
             {count > 0 && <span className="absolute -top-1 -left-1 grid size-5 place-items-center rounded-full bg-primary text-[10px] font-bold text-primary-foreground">{count}</span>}
           </Link>
           <Link to="/booking" className="btn btn-primary hidden sm:inline-flex">احجز خدمة</Link>
+          <Link to={signedIn ? "/admin" : "/auth"} className="rounded-lg p-2 hover:bg-secondary" aria-label={signedIn ? "لوحة الطلبات" : "تسجيل الدخول"}>
+            {signedIn ? <LayoutDashboard className="size-5 text-primary-deep" /> : <LogIn className="size-5 text-primary-deep" />}
+          </Link>
           <button className="rounded-lg p-2 lg:hidden" onClick={() => setOpen(!open)} aria-label="القائمة">{open ? <X /> : <Menu />}</button>
         </div>
       </div>
