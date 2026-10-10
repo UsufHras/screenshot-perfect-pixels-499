@@ -1,8 +1,9 @@
 import { Link } from "@tanstack/react-router";
-import { useState, type ReactNode } from "react";
-import { Menu, X, ShoppingCart, Phone, Mail, MapPin, CheckCircle2, MessageCircle, Bug } from "lucide-react";
+import { useEffect, useState, type ReactNode } from "react";
+import { Menu, X, ShoppingCart, Phone, Mail, MapPin, CheckCircle2, MessageCircle, Bug, LayoutDashboard, LogIn } from "lucide-react";
 import { SITE, waLink } from "@/lib/data";
 import { useCart } from "@/lib/cart";
+import { supabase } from "@/integrations/supabase/client";
 
 const nav = [
   { to: "/", label: "الرئيسية" },
@@ -16,7 +17,13 @@ const nav = [
 
 export function Header() {
   const [open, setOpen] = useState(false);
+  const [signedIn, setSignedIn] = useState(false);
   const { count } = useCart();
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data }) => setSignedIn(!!data.session));
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_e, session) => setSignedIn(!!session));
+    return () => subscription.unsubscribe();
+  }, []);
   return (
     <header className="sticky top-0 z-40 border-b bg-background/90 backdrop-blur">
       <div className="mx-auto flex h-18 max-w-7xl items-center justify-between gap-4 px-4 py-3">
@@ -40,6 +47,9 @@ export function Header() {
             {count > 0 && <span className="absolute -top-1 -left-1 grid size-5 place-items-center rounded-full bg-primary text-[10px] font-bold text-primary-foreground">{count}</span>}
           </Link>
           <Link to="/booking" className="btn btn-primary hidden sm:inline-flex">احجز خدمة</Link>
+          <Link to={signedIn ? "/admin" : "/auth"} className="rounded-lg p-2 hover:bg-secondary" aria-label={signedIn ? "لوحة الطلبات" : "تسجيل الدخول"}>
+            {signedIn ? <LayoutDashboard className="size-5 text-primary-deep" /> : <LogIn className="size-5 text-primary-deep" />}
+          </Link>
           <button className="rounded-lg p-2 lg:hidden" onClick={() => setOpen(!open)} aria-label="القائمة">{open ? <X /> : <Menu />}</button>
         </div>
       </div>
