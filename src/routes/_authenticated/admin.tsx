@@ -111,7 +111,7 @@ function SubmissionCard({ s, open, onToggle, onStatus }: {
   s: Submission; open: boolean; onToggle: () => void; onStatus: (status: string) => void;
 }) {
   const [urls, setUrls] = useState<Record<string, string> | null>(null);
-  const attachments = Array.isArray(s.data?.attachments) ? (s.data.attachments as string[]) : [];
+  const attachments = Array.isArray(s.data?.["attachments"]) ? (s.data["attachments"] as string[]) : [];
   const entries = Object.entries(s.data ?? {}).filter(([k]) => k !== "attachments");
 
   const toggle = async () => {
