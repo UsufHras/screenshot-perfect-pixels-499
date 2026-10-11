@@ -17,11 +17,17 @@ const nav = [
 
 export function Header() {
   const [open, setOpen] = useState(false);
-  const [signedIn, setSignedIn] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const signedIn = isAdmin;
   const { count } = useCart();
   useEffect(() => {
-    supabase.auth.getSession().then(({ data }) => setSignedIn(!!data.session));
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_e, session) => setSignedIn(!!session));
+    const check = async (uid?: string) => {
+      if (!uid) return setIsAdmin(false);
+      const { data } = await supabase.from("user_roles").select("role").eq("user_id", uid).eq("role", "admin").maybeSingle();
+      setIsAdmin(!!data);
+    };
+    supabase.auth.getSession().then(({ data }) => check(data.session?.user.id));
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_e, session) => { setTimeout(() => check(session?.user.id), 0); });
     return () => subscription.unsubscribe();
   }, []);
   return (
