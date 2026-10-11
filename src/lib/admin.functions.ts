@@ -1,13 +1,14 @@
 import { createServerFn } from "@tanstack/react-start";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
-type RpcFn = (fn: string, args: Record<string, unknown>) => Promise<{ data: unknown; error: unknown }>;
-
-async function assertAdmin(supabase: { rpc: unknown }, userId: string) {
-  const rpc = supabase.rpc as RpcFn;
-  const { data, error } = await rpc("has_role", { _user_id: userId, _role: "admin" });
-  console.log("[admin] has_role result:", JSON.stringify({ data, error, userId }));
-  if (error || data !== true) throw new Error("Forbidden: admin access required");
+async function assertAdmin(supabase: { from: (t: string) => any }, userId: string) {
+  const { data, error } = await supabase
+    .from("user_roles")
+    .select("role")
+    .eq("user_id", userId)
+    .eq("role", "admin")
+    .maybeSingle();
+  if (error || !data) throw new Error("Forbidden: admin access required");
 }
 
 export const listSubmissions = createServerFn({ method: "GET" })
