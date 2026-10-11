@@ -23,9 +23,11 @@ function AuthPage() {
     setLoading(true); setError(null); setNotice(null);
     try {
       if (mode === "signin") {
-        const { error } = await supabase.auth.signInWithPassword({ email, password });
+        const { data, error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
-        navigate({ to: "/admin" });
+        const { data: role } = await supabase.from("user_roles").select("role")
+          .eq("user_id", data.user.id).eq("role", "admin").maybeSingle();
+        navigate({ to: role ? "/admin" : "/" });
       } else {
         const { error } = await supabase.auth.signUp({ email, password });
         if (error) throw error;
