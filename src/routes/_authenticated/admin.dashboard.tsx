@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { BarChart, Bar, LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from "recharts";
 import { useSubmissions, kindLabel, orderTotal, NoAccess, type Submission } from "@/components/admin/submissions";
-import { products, posts, fmt } from "@/lib/data";
+import { productsList as products, posts, fmt } from "@/lib/data";
 import { ShoppingBag, Sparkles, Stethoscope, CalendarCheck, Package, AlertTriangle, Users, FileText } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/admin/dashboard")({
@@ -30,7 +30,7 @@ function Dashboard() {
   const consults = all.filter((s) => s.kind === "consultation");
   const services = all.filter((s) => s.kind === "booking" || s.kind === "quote");
   const customers = new Set(all.map((s) => s.phone).filter(Boolean)).size;
-  const p = products as unknown as { inStock?: boolean }[];
+  const p = products;
 
   const stats = [
     { label: "إجمالي الطلبات", v: orders.length, icon: ShoppingBag },
@@ -38,7 +38,7 @@ function Dashboard() {
     { label: "الاستشارات الجديدة", v: consults.filter((s) => s.status === "new").length, icon: Stethoscope },
     { label: "طلبات الخدمات الجديدة", v: services.filter((s) => s.status === "new").length, icon: CalendarCheck },
     { label: "إجمالي المنتجات", v: products.length, icon: Package },
-    { label: "منتجات غير متوفرة", v: p.filter((x) => x.inStock === false).length, icon: AlertTriangle },
+    { label: "منتجات غير متوفرة", v: p.filter((x) => !x.available).length, icon: AlertTriangle },
     { label: "عدد العملاء", v: customers, icon: Users },
     { label: "المقالات المنشورة", v: posts.length, icon: FileText },
   ];
