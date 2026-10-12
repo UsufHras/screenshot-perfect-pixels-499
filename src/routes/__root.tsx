@@ -83,13 +83,18 @@ function RootComponent() {
     });
     return () => subscription.unsubscribe();
   }, [router, queryClient]);
+  const isAdmin = useRouterState({ select: (s) => s.location.pathname.startsWith("/admin") });
   return (
     <QueryClientProvider client={queryClient}>
       <CartProvider>
-        <Header />
-        <main className="min-h-[60vh]"><Outlet /></main>
-        <Footer />
-        <WhatsAppFloat />
+        {isAdmin ? <Outlet /> : (
+          <>
+            <Header />
+            <main className="min-h-[60vh]"><Outlet /></main>
+            <Footer />
+            <WhatsAppFloat />
+          </>
+        )}
       </CartProvider>
     </QueryClientProvider>
   );

@@ -27,7 +27,7 @@ function AuthPage() {
         if (error) throw error;
         const { data: role } = await supabase.from("user_roles").select("role")
           .eq("user_id", data.user.id).eq("role", "admin").maybeSingle();
-        navigate({ to: role ? "/admin" : "/" });
+        navigate({ to: role ? "/admin/dashboard" : "/" });
       } else {
         const { error } = await supabase.auth.signUp({ email, password });
         if (error) throw error;
