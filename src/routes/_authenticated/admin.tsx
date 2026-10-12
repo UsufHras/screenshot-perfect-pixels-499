@@ -1,54 +1,48 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
+import { createFileRoute, Link, Outlet, useNavigate, useRouterState } from "@tanstack/react-router";
+import { useQueryClient } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { listSubmissions, updateSubmissionStatus, getAttachmentUrls } from "@/lib/admin.functions";
-import { Container, meta } from "@/components/site";
-import { ChevronDown, LogOut, Paperclip } from "lucide-react";
+import { useSubmissions } from "@/components/admin/submissions";
+import {
+  LayoutDashboard, Stethoscope, CalendarCheck, ShoppingBag, Package, Wrench, FileText,
+  Users, Star, Mail, BarChart3, Settings, LogOut, Menu, X, Bell, ExternalLink,
+} from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/admin")({
-  head: () => meta("لوحة الطلبات", "عرض وإدارة الطلبات والحجوزات والرسائل الواردة."),
-  component: AdminPage,
+  head: () => ({ meta: [{ title: "لوحة التحكم" }, { name: "robots", content: "noindex" }] }),
+  component: AdminLayout,
 });
 
-const kinds = [
-  { key: "all", label: "الكل" },
-  { key: "booking", label: "حجوزات" },
-  { key: "consultation", label: "استشارات" },
-  { key: "quote", label: "عروض أسعار" },
-  { key: "contact", label: "رسائل" },
-  { key: "order", label: "طلبات المتجر" },
+const nav = [
+  { to: "/admin/dashboard", label: "الرئيسية", icon: LayoutDashboard },
+  { to: "/admin/consultations", label: "الاستشارات", icon: Stethoscope, kinds: ["consultation"] },
+  { to: "/admin/bookings", label: "طلبات الخدمات", icon: CalendarCheck, kinds: ["booking", "quote"] },
+  { to: "/admin/orders", label: "الطلبات", icon: ShoppingBag, kinds: ["order"] },
+  { to: "/admin/messages", label: "الرسائل", icon: Mail, kinds: ["contact"] },
 ] as const;
 
-const kindLabel: Record<string, string> = Object.fromEntries(kinds.map((k) => [k.key, k.label]));
+const soon = [
+  { label: "المنتجات", icon: Package },
+  { label: "الخدمات", icon: Wrench },
+  { label: "المقالات", icon: FileText },
+  { label: "العملاء", icon: Users },
+  { label: "التقييمات", icon: Star },
+  { label: "التقارير", icon: BarChart3 },
+  { label: "الإعدادات", icon: Settings },
+];
 
-const statuses = [
-  { key: "new", label: "جديد" },
-  { key: "in_progress", label: "قيد المتابعة" },
-  { key: "done", label: "مكتمل" },
-  { key: "cancelled", label: "ملغي" },
-] as const;
-
-type Submission = {
-  id: string;
-  kind: string;
-  name: string | null;
-  phone: string | null;
-  data: Record<string, unknown>;
-  status: string;
-  created_at: string;
-};
-
-function AdminPage() {
+function AdminLayout() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const [filter, setFilter] = useState<string>("all");
-  const [openId, setOpenId] = useState<string | null>(null);
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const [open, setOpen] = useState(false);
+  const [email, setEmail] = useState("");
+  const { data } = useSubmissions();
+  const newCount = (kinds: readonly string[]) => (data ?? []).filter((s) => kinds.includes(s.kind) && s.status === "new").length;
+  const totalNew = (data ?? []).filter((s) => s.status === "new").length;
 
-  const { data: submissions, isLoading, error } = useQuery<Submission[]>({
-    queryKey: ["admin-submissions"],
-    queryFn: () => listSubmissions() as Promise<Submission[]>,
-  });
+  useEffect(() => { supabase.auth.getUser().then(({ data }) => setEmail(data.user?.email ?? "")); }, []);
+  useEffect(() => setOpen(false), [pathname]);
 
   const signOut = async () => {
     await queryClient.cancelQueries();
@@ -57,116 +51,64 @@ function AdminPage() {
     navigate({ to: "/auth", replace: true });
   };
 
-  const filtered = (submissions ?? []).filter((s) => filter === "all" || s.kind === filter);
-  const counts = (submissions ?? []).reduce<Record<string, number>>((acc, s) => {
-    acc[s.kind] = (acc[s.kind] ?? 0) + 1;
-    return acc;
-  }, {});
+  const title = nav.find((n) => pathname.startsWith(n.to))?.label ?? "لوحة التحكم";
 
-  return (
-    <Container className="py-12">
-      <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-extrabold text-primary-deep">لوحة الطلبات</h1>
-          <p className="mt-1 text-sm text-muted-foreground">كل الحجوزات والاستشارات والرسائل والطلبات الواردة.</p>
-        </div>
-        <button onClick={signOut} className="btn btn-outline"><LogOut className="size-4" />تسجيل الخروج</button>
-      </div>
-
-      <div className="mb-6 flex flex-wrap gap-2">
-        {kinds.map((k) => (
-          <button key={k.key} onClick={() => setFilter(k.key)}
-            className={`rounded-full border px-4 py-1.5 text-sm font-bold transition ${filter === k.key ? "border-primary bg-primary text-primary-foreground" : "hover:bg-secondary"}`}>
-            {k.label}{k.key !== "all" && counts[k.key] ? ` (${counts[k.key]})` : ""}
-          </button>
-        ))}
-      </div>
-
-      {isLoading && <p className="py-16 text-center text-muted-foreground">جارٍ تحميل الطلبات...</p>}
-      {error && (
-        <div className="card-soft mx-auto max-w-lg p-8 text-center">
-          <p className="font-bold text-destructive">لا تملك صلاحية الوصول لهذه اللوحة بعد.</p>
-          <p className="mt-2 text-sm text-muted-foreground">هذا الحساب ليس حساب إدارة. تواصل مع مطوّر الموقع لمنحك صلاحية الإدارة.</p>
-        </div>
-      )}
-      {!isLoading && !error && filtered.length === 0 && (
-        <p className="py-16 text-center text-muted-foreground">لا توجد طلبات في هذا القسم بعد.</p>
-      )}
-
-      <div className="space-y-3">
-        {filtered.map((s) => (
-          <SubmissionCard key={s.id} s={s} open={openId === s.id}
-            onToggle={() => setOpenId(openId === s.id ? null : s.id)}
-            onStatus={async (status) => {
-              await updateSubmissionStatus({ data: { id: s.id, status } });
-              queryClient.invalidateQueries({ queryKey: ["admin-submissions"] });
-            }} />
-        ))}
-      </div>
-    </Container>
+  const sidebar = (
+    <nav className="flex h-full flex-col gap-1 p-4">
+      <div className="mb-6 px-2 text-lg font-extrabold">لوحة التحكم</div>
+      {nav.map((n) => {
+        const active = pathname.startsWith(n.to);
+        const c = "kinds" in n ? newCount(n.kinds) : 0;
+        return (
+          <Link key={n.to} to={n.to}
+            className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-bold transition ${active ? "bg-primary text-primary-foreground" : "opacity-85 hover:bg-primary-foreground/10"}`}>
+            <n.icon className="size-4" />{n.label}
+            {c > 0 && <span className="mr-auto rounded-full bg-warning px-2 text-xs text-primary-foreground">{c}</span>}
+          </Link>
+        );
+      })}
+      <div className="mt-4 px-3 text-xs opacity-60">قريباً</div>
+      {soon.map((n) => (
+        <span key={n.label} className="flex cursor-not-allowed items-center gap-3 rounded-xl px-3 py-2 text-sm opacity-50">
+          <n.icon className="size-4" />{n.label}
+        </span>
+      ))}
+      <a href="/" target="_blank" className="mt-auto flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm opacity-85 hover:bg-primary-foreground/10">
+        <ExternalLink className="size-4" />عرض الموقع
+      </a>
+    </nav>
   );
-}
-
-function SubmissionCard({ s, open, onToggle, onStatus }: {
-  s: Submission; open: boolean; onToggle: () => void; onStatus: (status: string) => void;
-}) {
-  const [urls, setUrls] = useState<Record<string, string> | null>(null);
-  const attachments = Array.isArray(s.data?.["attachments"]) ? (s.data["attachments"] as string[]) : [];
-  const entries = Object.entries(s.data ?? {}).filter(([k]) => k !== "attachments");
-
-  const toggle = async () => {
-    onToggle();
-    if (!open && attachments.length && !urls) {
-      setUrls(await getAttachmentUrls({ data: { paths: attachments } }));
-    }
-  };
-
-  const status = statuses.find((st) => st.key === s.status) ?? statuses[0];
 
   return (
-    <div className="card-soft overflow-hidden">
-      <button onClick={toggle} className="flex w-full flex-wrap items-center gap-3 p-4 text-right">
-        <span className="rounded-full bg-secondary px-3 py-1 text-xs font-bold text-primary-deep">{kindLabel[s.kind] ?? s.kind}</span>
-        <span className="font-bold">{s.name ?? "بدون اسم"}</span>
-        {s.phone && <span className="text-sm text-muted-foreground" dir="ltr">{s.phone}</span>}
-        <span className="text-xs text-muted-foreground">{new Date(s.created_at).toLocaleString("ar-EG")}</span>
-        <span className={`mr-auto rounded-full px-3 py-1 text-xs font-bold ${s.status === "new" ? "bg-warning-soft text-warning" : s.status === "done" ? "bg-secondary text-primary" : "bg-muted text-muted-foreground"}`}>{status.label}</span>
-        <ChevronDown className={`size-4 transition ${open ? "rotate-180" : ""}`} />
-      </button>
+    <div className="flex min-h-screen bg-muted/40">
+      <aside className="bg-deep sticky top-0 hidden h-screen w-64 shrink-0 overflow-y-auto lg:block">{sidebar}</aside>
       {open && (
-        <div className="border-t p-4">
-          <dl className="grid gap-3 md:grid-cols-2">
-            {entries.map(([k, v]) => (
-              <div key={k} className="rounded-xl bg-muted/60 p-3">
-                <dt className="text-xs font-bold text-muted-foreground">{k}</dt>
-                <dd className="mt-1 whitespace-pre-wrap text-sm font-semibold">{typeof v === "object" ? JSON.stringify(v, null, 2) : String(v)}</dd>
-              </div>
-            ))}
-          </dl>
-          {attachments.length > 0 && (
-            <div className="mt-4">
-              <p className="mb-2 flex items-center gap-1 text-sm font-bold"><Paperclip className="size-4" />المرفقات ({attachments.length})</p>
-              <div className="flex flex-wrap gap-2">
-                {attachments.map((p) => (
-                  <a key={p} href={urls?.[p] ?? "#"} target="_blank" rel="noreferrer"
-                    className={`btn btn-outline text-xs ${urls?.[p] ? "" : "pointer-events-none opacity-50"}`}>
-                    {p.split("/").pop()}
-                  </a>
-                ))}
-              </div>
-            </div>
-          )}
-          <div className="mt-4 flex flex-wrap items-center gap-2">
-            <span className="text-sm font-bold">تغيير الحالة:</span>
-            {statuses.map((st) => (
-              <button key={st.key} onClick={() => onStatus(st.key)} disabled={st.key === s.status}
-                className={`rounded-full border px-3 py-1 text-xs font-bold transition ${st.key === s.status ? "border-primary bg-primary text-primary-foreground" : "hover:bg-secondary"}`}>
-                {st.label}
-              </button>
-            ))}
-          </div>
+        <div className="fixed inset-0 z-50 lg:hidden">
+          <div className="absolute inset-0 bg-foreground/40" onClick={() => setOpen(false)} />
+          <aside className="bg-deep absolute inset-y-0 right-0 w-72 overflow-y-auto">
+            <button onClick={() => setOpen(false)} className="absolute left-3 top-3 p-2" aria-label="إغلاق"><X className="size-5" /></button>
+            {sidebar}
+          </aside>
         </div>
       )}
+      <div className="flex min-w-0 flex-1 flex-col">
+        <header className="sticky top-0 z-40 flex h-16 items-center gap-3 border-b bg-card px-4 md:px-6">
+          <button onClick={() => setOpen(true)} className="p-2 lg:hidden" aria-label="القائمة"><Menu className="size-5" /></button>
+          <h2 className="text-lg font-extrabold text-primary-deep">{title}</h2>
+          <div className="mr-auto flex items-center gap-2">
+            <Link to="/admin/dashboard" className="relative rounded-full p-2 hover:bg-secondary" aria-label="الإشعارات">
+              <Bell className="size-5" />
+              {totalNew > 0 && <span className="absolute -top-0.5 -left-0.5 grid size-5 place-items-center rounded-full bg-warning text-[10px] font-bold text-primary-foreground">{totalNew}</span>}
+            </Link>
+            <div className="hidden items-center gap-2 sm:flex">
+              <span className="grid size-8 place-items-center rounded-full bg-primary text-sm font-bold text-primary-foreground">{email.charAt(0).toUpperCase() || "د"}</span>
+              <span className="text-sm text-muted-foreground" dir="ltr">{email}</span>
+            </div>
+            <button onClick={signOut} className="btn btn-outline text-xs"><LogOut className="size-4" /><span className="hidden sm:inline">خروج</span></button>
+          </div>
+        </header>
+        <main className="flex-1 p-4 md:p-6"><Outlet /></main>
+      </div>
     </div>
   );
 }
