@@ -14,6 +14,66 @@ export type Database = {
   }
   public: {
     Tables: {
+      products: {
+        Row: {
+          available: boolean
+          category: string
+          created_at: string
+          id: string
+          image_url: string
+          name: string
+          pests: string[]
+          price: number
+          regulated: boolean
+          safety: string[]
+          short: string
+          slug: string
+          sort_order: number
+          storage_note: string
+          updated_at: string
+          usage: string
+          use_place: string
+        }
+        Insert: {
+          available?: boolean
+          category?: string
+          created_at?: string
+          id?: string
+          image_url?: string
+          name: string
+          pests?: string[]
+          price: number
+          regulated?: boolean
+          safety?: string[]
+          short?: string
+          slug: string
+          sort_order?: number
+          storage_note?: string
+          updated_at?: string
+          usage?: string
+          use_place?: string
+        }
+        Update: {
+          available?: boolean
+          category?: string
+          created_at?: string
+          id?: string
+          image_url?: string
+          name?: string
+          pests?: string[]
+          price?: number
+          regulated?: boolean
+          safety?: string[]
+          short?: string
+          slug?: string
+          sort_order?: number
+          storage_note?: string
+          updated_at?: string
+          usage?: string
+          use_place?: string
+        }
+        Relationships: []
+      }
       submissions: {
         Row: {
           created_at: string
