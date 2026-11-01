@@ -15,6 +15,20 @@
       "when": 1791547674567,
       "tag": "0001_migration",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1793511516749,
+      "tag": "0002_create_products",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1793511531182,
+      "tag": "0003_products_bucket_policies",
+      "breakpoints": true
     }
   ]
 }
