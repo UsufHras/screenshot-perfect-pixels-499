@@ -1,5 +1,7 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { productsList, type Product } from "./data";
+import { productsOptions } from "./use-products";
 
 type Line = { slug: string; qty: number };
 type Ctx = {
@@ -16,8 +18,10 @@ const KEY = "pest-cart";
 export function CartProvider({ children }: { children: ReactNode }) {
   const [raw, setRaw] = useState<Line[]>([]);
   useEffect(() => { try { setRaw(JSON.parse(localStorage.getItem(KEY) || "[]")); } catch {} }, []);
+  const { data: dbProducts } = useQuery(productsOptions);
+  const all: Product[] = dbProducts ?? productsList;
   const save = (l: Line[]) => { setRaw(l); localStorage.setItem(KEY, JSON.stringify(l)); };
-  const lines = raw.flatMap((l) => { const product = productsList.find((p) => p.slug === l.slug); return product ? [{ ...l, product }] : []; });
+  const lines = raw.flatMap((l) => { const product = all.find((p) => p.slug === l.slug); return product ? [{ ...l, product }] : []; });
   const value: Ctx = {
     lines,
     count: lines.reduce((s, l) => s + l.qty, 0),
