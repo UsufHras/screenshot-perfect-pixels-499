@@ -1,10 +1,10 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { createProduct, updateProduct, deleteProduct, type ProductInput } from "@/lib/products.functions";
-import { productsQueryOptions, productImageUrl } from "@/lib/use-products";
+import { useProductRows, toProduct } from "@/lib/use-products";
 import { supabase } from "@/integrations/supabase/client";
 import { fmt, type Product } from "@/lib/data";
-import { Plus, Pencil, Trash2, X, Package } from "lucide-react";
+import { Plus, Pencil, Trash2, X } from "lucide-react";
 import { NoAccess } from "./submissions";
 
 type FormState = {
@@ -43,24 +43,28 @@ function payload(f: FormState, imageUrl: string): ProductInput {
   };
 }
 
+type Editing = { id: string | null; imagePath: string; form: FormState };
+
 export function ProductsAdmin() {
   const queryClient = useQueryClient();
-  const [editing, setEditing] = useState<{ id?: string; image: string; form: FormState } | null>(null);
+  const [editing, setEditing] = useState<Editing | null>(null);
   const [file, setFile] = useState<File | null>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const { data, isLoading, error: accessError } = useProductsSafe();
-  const products = data ?? [];
+  const { data: rows, isLoading, error: accessError } = useProductRows();
+  const products = (rows ?? []).map(toProduct);
+  const pathBySlug = new Map((rows ?? []).map((r) => [r.slug, r.image_url]));
+  const idBySlug = new Map((rows ?? []).map((r) => [r.slug, r.id]));
   const categoryOptions = [...new Set(products.map((p) => p.category))];
 
-  const startAdd = () => { setFile(null); setEditing({ image: "", form: { ...emptyForm } }); };
+  const startAdd = () => { setFile(null); setEditing({ id: null, imagePath: "", form: { ...emptyForm } }); };
   const startEdit = (p: Product) => {
     setFile(null);
-    setEditing({ id: p.slug, image: p.image.startsWith("/api/") ? "" : p.image, form: toForm(p) });
+    setEditing({ id: p.slug, imagePath: pathBySlug.get(p.slug) ?? "", form: toForm(p) });
   };
 
-  const refresh = () => queryClient.invalidateQueries({ queryKey: productsQueryOptions.queryKey });
+  const refresh = () => queryClient.invalidateQueries({ queryKey: ["products"] });
 
   const save = async () => {
     if (!editing) return;
@@ -68,21 +72,19 @@ export function ProductsAdmin() {
     if (!f.name.trim() || !f.price) { setError("الاسم والسعر مطلوبان."); return; }
     setBusy(true); setError(null);
     try {
-      let imageUrl = "";
+      let imagePath = editing.imagePath;
       if (file) {
-        const ext = (file.name.split(".").pop() || "jpg").toLowerCase();
+        const ext = (file.name.split(".").pop() || "jpg").toLowerCase().replace(/[^a-z0-9]/g, "") || "jpg";
         const path = `${crypto.randomUUID()}.${ext}`;
         const { error: upErr } = await supabase.storage.from("products").upload(path, file, { upsert: false });
         if (upErr) throw upErr;
-        imageUrl = path;
-      } else if (editing.id && editing.image.startsWith("blob:")) {
-        // image removed / replaced but no new file chosen: keep the old stored path
-        imageUrl = storedPath(editing.form.slug);
-      } else {
-        imageUrl = editing.image;
+        imagePath = path;
       }
-      if (editing.id) await updateProduct({ data: { id: editing.id, ...payload(f, imageUrl) } });
-      else await createProduct({ data: { slug: f.slug.trim() || undefined, ...payload(f, imageUrl) } });
+      if (editing.id) {
+        await updateProduct({ data: { id: idBySlug.get(editing.id)!, ...payload(f, imagePath) } });
+      } else {
+        await createProduct({ data: { slug: f.slug.trim() || undefined, ...payload(f, imagePath) } });
+      }
       setEditing(null);
       await refresh();
     } catch (e) {
@@ -96,7 +98,7 @@ export function ProductsAdmin() {
     if (!confirm(`حذف المنتج "${p.name}"؟`)) return;
     setBusy(true);
     try {
-      await deleteProduct({ data: { id: p.slug } });
+      await deleteProduct({ data: { id: idBySlug.get(p.slug)! } });
       await refresh();
     } finally { setBusy(false); }
   };
@@ -181,13 +183,3 @@ export function ProductsAdmin() {
     </div>
   );
 }
-
-// Product.slug doubles as the products.id lookup because the admin list maps
-// rows through toProduct(), which drops the uuid. Keep lookups keyed by slug.
-function storedPath(_slug: string) { return ""; }
-
-function useProductsSafe() {
-  return useProductsHook();
-}
-
-import { useProducts as useProductsHook } from "@/lib/use-products";
