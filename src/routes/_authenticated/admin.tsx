@@ -18,11 +18,11 @@ const nav = [
   { to: "/admin/consultations", label: "الاستشارات", icon: Stethoscope, kinds: ["consultation"] },
   { to: "/admin/bookings", label: "طلبات الخدمات", icon: CalendarCheck, kinds: ["booking", "quote"] },
   { to: "/admin/orders", label: "الطلبات", icon: ShoppingBag, kinds: ["order"] },
+  { to: "/admin/products", label: "المنتجات", icon: Package },
   { to: "/admin/messages", label: "الرسائل", icon: Mail, kinds: ["contact"] },
 ] as const;
 
 const soon = [
-  { label: "المنتجات", icon: Package },
   { label: "الخدمات", icon: Wrench },
   { label: "المقالات", icon: FileText },
   { label: "العملاء", icon: Users },

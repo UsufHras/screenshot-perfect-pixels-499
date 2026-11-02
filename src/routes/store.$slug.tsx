@@ -1,14 +1,17 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { AlertTriangle, Minus, Plus, Stethoscope } from "lucide-react";
-import { productsList, fmt, images } from "@/lib/data";
+import { fmt, images } from "@/lib/data";
+import { productsQuery, productsOptions, toProduct } from "@/lib/use-products";
 import { useCart } from "@/lib/cart";
 import { Container, meta } from "@/components/site";
 import { ProductCard } from "@/components/cards";
 
 export const Route = createFileRoute("/store/$slug")({
-  loader: ({ params }) => {
-    const p = productsList.find((x) => x.slug === params.slug);
+  loader: async ({ context, params }) => {
+    const rows = await context.queryClient.ensureQueryData(productsQuery);
+    const p = rows.map(toProduct).find((x) => x.slug === params.slug);
     if (!p) throw notFound();
     return p;
   },
@@ -18,11 +21,12 @@ export const Route = createFileRoute("/store/$slug")({
 
 function ProductDetail() {
   const p = Route.useLoaderData();
+  const { data: allProducts } = useSuspenseQuery(productsOptions);
   const { add } = useCart();
   const [qty, setQty] = useState(1);
   const gallery = [p.image, images.products, images.hero];
   const [img, setImg] = useState(0);
-  const related = productsList.filter((x) => x.slug !== p.slug).slice(0, 4);
+  const related = allProducts.filter((x) => x.slug !== p.slug).slice(0, 4);
   return (
     <Container className="py-12">
       <div className="grid gap-10 md:grid-cols-2">

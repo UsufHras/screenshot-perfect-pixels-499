@@ -1,11 +1,14 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { ShieldCheck, Microscope, Building2, RefreshCcw, Stethoscope, MessageCircle, ArrowLeft } from "lucide-react";
-import { images, services, process, productsList, posts, waLink } from "@/lib/data";
+import { images, services, process, posts, waLink } from "@/lib/data";
+import { productsOptions } from "@/lib/use-products";
 import { Container, SectionTitle, meta } from "@/components/site";
 import { ServiceCard, ProductCard, PostCard } from "@/components/cards";
 
 export const Route = createFileRoute("/")({
   head: () => meta("حلول علمية وآمنة لمكافحة الآفات", "استشارات متخصصة، مكافحة احترافية، ومنتجات فعالة لحماية منزلك ومنشأتك من الآفات."),
+  loader: ({ context }) => context.queryClient.ensureQueryData(productsOptions),
   component: Index,
 });
 
@@ -16,6 +19,7 @@ const trust = [
 ];
 
 function Index() {
+  const { data: products } = useSuspenseQuery(productsOptions);
   return (
     <>
       <section className="relative overflow-hidden">
@@ -87,7 +91,7 @@ function Index() {
             <SectionTitle eyebrow="المتجر" title="منتجات مكافحة موثوقة" subtitle="منتجات مختارة بعناية مع إرشادات استخدام آمنة." />
             <Link to="/store" className="mb-10 inline-flex items-center gap-1 font-bold text-primary">تسوق المنتجات <ArrowLeft className="size-4" /></Link>
           </div>
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">{productsList.slice(0, 4).map((p) => <ProductCard key={p.slug} p={p} />)}</div>
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">{products.slice(0, 4).map((p) => <ProductCard key={p.slug} p={p} />)}</div>
         </Container>
       </section>
 

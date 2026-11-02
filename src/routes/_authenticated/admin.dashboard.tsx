@@ -2,7 +2,8 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { BarChart, Bar, LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from "recharts";
 import { useSubmissions, kindLabel, orderTotal, NoAccess, type Submission } from "@/components/admin/submissions";
-import { productsList as products, posts, fmt } from "@/lib/data";
+import { posts, fmt } from "@/lib/data";
+import { useProducts } from "@/lib/use-products";
 import { ShoppingBag, Sparkles, Stethoscope, CalendarCheck, Package, AlertTriangle, Users, FileText } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/admin/dashboard")({
@@ -24,8 +25,10 @@ function series(list: Submission[], days: number, value: (s: Submission) => numb
 function Dashboard() {
   const { data, isLoading, error } = useSubmissions();
   const [days, setDays] = useState(7);
+  const { data: productRows, isLoading: productsLoading } = useProducts();
   if (error) return <NoAccess />;
   const all = data ?? [];
+  const p = productRows ?? [];
   const orders = all.filter((s) => s.kind === "order");
   const consults = all.filter((s) => s.kind === "consultation");
   const services = all.filter((s) => s.kind === "booking" || s.kind === "quote");
@@ -37,8 +40,8 @@ function Dashboard() {
     { label: "طلبات جديدة", v: orders.filter((s) => s.status === "new").length, icon: Sparkles },
     { label: "الاستشارات الجديدة", v: consults.filter((s) => s.status === "new").length, icon: Stethoscope },
     { label: "طلبات الخدمات الجديدة", v: services.filter((s) => s.status === "new").length, icon: CalendarCheck },
-    { label: "إجمالي المنتجات", v: products.length, icon: Package },
-    { label: "منتجات غير متوفرة", v: p.filter((x) => !x.available).length, icon: AlertTriangle },
+    { label: "إجمالي المنتجات", v: productsLoading ? 0 : p.length, icon: Package },
+    { label: "منتجات غير متوفرة", v: productsLoading ? 0 : p.filter((x) => !x.available).length, icon: AlertTriangle },
     { label: "عدد العملاء", v: customers, icon: Users },
     { label: "المقالات المنشورة", v: posts.length, icon: FileText },
   ];
