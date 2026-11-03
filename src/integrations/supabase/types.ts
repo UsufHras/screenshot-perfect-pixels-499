@@ -14,6 +14,51 @@ export type Database = {
   }
   public: {
     Tables: {
+      articles: {
+        Row: {
+          body: string[]
+          category: string
+          created_at: string
+          excerpt: string
+          id: string
+          image_url: string
+          minutes: number
+          published_on: string
+          slug: string
+          sort_order: number
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          body?: string[]
+          category?: string
+          created_at?: string
+          excerpt?: string
+          id?: string
+          image_url?: string
+          minutes?: number
+          published_on?: string
+          slug: string
+          sort_order?: number
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          body?: string[]
+          category?: string
+          created_at?: string
+          excerpt?: string
+          id?: string
+          image_url?: string
+          minutes?: number
+          published_on?: string
+          slug?: string
+          sort_order?: number
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       products: {
         Row: {
           available: boolean
