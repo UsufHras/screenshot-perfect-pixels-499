@@ -29,6 +29,13 @@
       "when": 1793511531182,
       "tag": "0003_products_bucket_policies",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1793678437862,
+      "tag": "0004_create_articles",
+      "breakpoints": true
     }
   ]
 }
