@@ -33,7 +33,6 @@ function Dashboard() {
   const consults = all.filter((s) => s.kind === "consultation");
   const services = all.filter((s) => s.kind === "booking" || s.kind === "quote");
   const customers = new Set(all.map((s) => s.phone).filter(Boolean)).size;
-  const p = products;
 
   const stats = [
     { label: "إجمالي الطلبات", v: orders.length, icon: ShoppingBag },

@@ -83,7 +83,8 @@ export function ProductsAdmin() {
       if (editing.id) {
         await updateProduct({ data: { id: idBySlug.get(editing.id)!, ...payload(f, imagePath) } });
       } else {
-        await createProduct({ data: { slug: f.slug.trim() || undefined, ...payload(f, imagePath) } });
+        const slug = f.slug.trim();
+        await createProduct({ data: slug ? { slug, ...payload(f, imagePath) } : payload(f, imagePath) });
       }
       setEditing(null);
       await refresh();
