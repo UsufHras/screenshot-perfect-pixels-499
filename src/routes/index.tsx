@@ -1,8 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { ShieldCheck, Microscope, Building2, RefreshCcw, Stethoscope, MessageCircle, ArrowLeft } from "lucide-react";
-import { images, services, process, posts, waLink } from "@/lib/data";
+import { images, services, process, waLink } from "@/lib/data";
 import { productsOptions } from "@/lib/use-products";
+import { articlesOptions } from "@/lib/use-articles";
 import { Container, SectionTitle, meta } from "@/components/site";
 import { ServiceCard, ProductCard, PostCard } from "@/components/cards";
 
