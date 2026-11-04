@@ -102,7 +102,7 @@ function Index() {
 
       <Container className="py-20">
         <SectionTitle eyebrow="المعرفة والوقاية" title="مقالات تساعدك على الوقاية" />
-        <div className="grid gap-6 md:grid-cols-3">{posts.slice(0, 3).map((p) => <PostCard key={p.slug} post={p} />)}</div>
+        <div className="grid gap-6 md:grid-cols-3">{articles.slice(0, 3).map((p) => <PostCard key={p.slug} post={p} />)}</div>
       </Container>
 
       <Container>
