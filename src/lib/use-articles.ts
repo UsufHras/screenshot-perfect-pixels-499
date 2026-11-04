@@ -17,7 +17,7 @@ export function toArticle(row: ArticleRow): Post {
     excerpt: row.excerpt,
     minutes: row.minutes,
     date: row.published_on,
-    image: row.image_url ? `/api/public/product-image?path=${encodeURIComponent(row.image_url)}` : (fallbackImageBySlug.get(row.slug) ?? posts[0].image),
+    image: row.image_url ? `/api/public/product-image?path=${encodeURIComponent(row.image_url)}` : (fallbackImageBySlug.get(row.slug) ?? posts[0]?.image ?? ""),
     body: row.body ?? [],
   };
 }

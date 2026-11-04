@@ -7,8 +7,8 @@ import { PostCard } from "@/components/cards";
 
 export const Route = createFileRoute("/blog/$slug")({
   loader: async ({ params, context }) => {
-    const all = await context.queryClient.ensureQueryData(articlesOptions);
-    const p = all.find((x) => x.slug === params.slug);
+    const rows = await context.queryClient.ensureQueryData(articlesQuery);
+    const p = rows.map(toArticle).find((x) => x.slug === params.slug);
     if (!p) throw notFound();
     return p;
   },
