@@ -9,7 +9,10 @@ import { ServiceCard, ProductCard, PostCard } from "@/components/cards";
 
 export const Route = createFileRoute("/")({
   head: () => meta("حلول علمية وآمنة لمكافحة الآفات", "استشارات متخصصة، مكافحة احترافية، ومنتجات فعالة لحماية منزلك ومنشأتك من الآفات."),
-  loader: ({ context }) => context.queryClient.ensureQueryData(productsOptions),
+  loader: ({ context }) => {
+    context.queryClient.ensureQueryData(productsOptions);
+    return context.queryClient.ensureQueryData(articlesOptions);
+  },
   component: Index,
 });
 
@@ -21,6 +24,7 @@ const trust = [
 
 function Index() {
   const { data: products } = useSuspenseQuery(productsOptions);
+  const { data: articles } = useSuspenseQuery(articlesOptions);
   return (
     <>
       <section className="relative overflow-hidden">
