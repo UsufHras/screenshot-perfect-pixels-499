@@ -30,6 +30,7 @@ import { Route as ServicesSlugRouteImport } from './routes/services.$slug'
 import { Route as StoreIndexRouteImport } from './routes/store.index'
 import { Route as StoreSlugRouteImport } from './routes/store.$slug'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin.index'
+import { Route as AuthenticatedAdminArticlesRouteImport } from './routes/_authenticated/admin.articles'
 import { Route as AuthenticatedAdminBookingsRouteImport } from './routes/_authenticated/admin.bookings'
 import { Route as AuthenticatedAdminConsultationsRouteImport } from './routes/_authenticated/admin.consultations'
 import { Route as AuthenticatedAdminDashboardRouteImport } from './routes/_authenticated/admin.dashboard'
@@ -142,6 +143,12 @@ const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AuthenticatedAdminRoute,
 } as any)
+const AuthenticatedAdminArticlesRoute =
+  AuthenticatedAdminArticlesRouteImport.update({
+    id: '/articles',
+    path: '/articles',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
 const AuthenticatedAdminBookingsRoute =
   AuthenticatedAdminBookingsRouteImport.update({
     id: '/bookings',
@@ -204,6 +211,7 @@ export interface FileRoutesByFullPath {
   '/blog/': typeof BlogIndexRoute
   '/services/': typeof ServicesIndexRoute
   '/store/': typeof StoreIndexRoute
+  '/admin/articles': typeof AuthenticatedAdminArticlesRoute
   '/admin/bookings': typeof AuthenticatedAdminBookingsRoute
   '/admin/consultations': typeof AuthenticatedAdminConsultationsRoute
   '/admin/dashboard': typeof AuthenticatedAdminDashboardRoute
@@ -232,6 +240,7 @@ export interface FileRoutesByTo {
   '/blog': typeof BlogIndexRoute
   '/services': typeof ServicesIndexRoute
   '/store': typeof StoreIndexRoute
+  '/admin/articles': typeof AuthenticatedAdminArticlesRoute
   '/admin/bookings': typeof AuthenticatedAdminBookingsRoute
   '/admin/consultations': typeof AuthenticatedAdminConsultationsRoute
   '/admin/dashboard': typeof AuthenticatedAdminDashboardRoute
@@ -263,6 +272,7 @@ export interface FileRoutesById {
   '/blog/': typeof BlogIndexRoute
   '/services/': typeof ServicesIndexRoute
   '/store/': typeof StoreIndexRoute
+  '/_authenticated/admin/articles': typeof AuthenticatedAdminArticlesRoute
   '/_authenticated/admin/bookings': typeof AuthenticatedAdminBookingsRoute
   '/_authenticated/admin/consultations': typeof AuthenticatedAdminConsultationsRoute
   '/_authenticated/admin/dashboard': typeof AuthenticatedAdminDashboardRoute
@@ -294,6 +304,7 @@ export interface FileRouteTypes {
     | '/blog/'
     | '/services/'
     | '/store/'
+    | '/admin/articles'
     | '/admin/bookings'
     | '/admin/consultations'
     | '/admin/dashboard'
@@ -322,6 +333,7 @@ export interface FileRouteTypes {
     | '/blog'
     | '/services'
     | '/store'
+    | '/admin/articles'
     | '/admin/bookings'
     | '/admin/consultations'
     | '/admin/dashboard'
@@ -352,6 +364,7 @@ export interface FileRouteTypes {
     | '/blog/'
     | '/services/'
     | '/store/'
+    | '/_authenticated/admin/articles'
     | '/_authenticated/admin/bookings'
     | '/_authenticated/admin/consultations'
     | '/_authenticated/admin/dashboard'
@@ -534,6 +547,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminIndexRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
+    '/_authenticated/admin/articles': {
+      id: '/_authenticated/admin/articles'
+      path: '/articles'
+      fullPath: '/admin/articles'
+      preLoaderRoute: typeof AuthenticatedAdminArticlesRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
     '/_authenticated/admin/bookings': {
       id: '/_authenticated/admin/bookings'
       path: '/bookings'
@@ -587,6 +607,7 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedAdminRouteChildren {
+  AuthenticatedAdminArticlesRoute: typeof AuthenticatedAdminArticlesRoute
   AuthenticatedAdminBookingsRoute: typeof AuthenticatedAdminBookingsRoute
   AuthenticatedAdminConsultationsRoute: typeof AuthenticatedAdminConsultationsRoute
   AuthenticatedAdminDashboardRoute: typeof AuthenticatedAdminDashboardRoute
@@ -597,6 +618,7 @@ interface AuthenticatedAdminRouteChildren {
 }
 
 const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
+  AuthenticatedAdminArticlesRoute: AuthenticatedAdminArticlesRoute,
   AuthenticatedAdminBookingsRoute: AuthenticatedAdminBookingsRoute,
   AuthenticatedAdminConsultationsRoute: AuthenticatedAdminConsultationsRoute,
   AuthenticatedAdminDashboardRoute: AuthenticatedAdminDashboardRoute,
