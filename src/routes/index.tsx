@@ -1,14 +1,18 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { ShieldCheck, Microscope, Building2, RefreshCcw, Stethoscope, MessageCircle, ArrowLeft } from "lucide-react";
-import { images, services, process, posts, waLink } from "@/lib/data";
+import { images, services, process, waLink } from "@/lib/data";
 import { productsOptions } from "@/lib/use-products";
+import { articlesOptions } from "@/lib/use-articles";
 import { Container, SectionTitle, meta } from "@/components/site";
 import { ServiceCard, ProductCard, PostCard } from "@/components/cards";
 
 export const Route = createFileRoute("/")({
   head: () => meta("حلول علمية وآمنة لمكافحة الآفات", "استشارات متخصصة، مكافحة احترافية، ومنتجات فعالة لحماية منزلك ومنشأتك من الآفات."),
-  loader: ({ context }) => context.queryClient.ensureQueryData(productsOptions),
+  loader: ({ context }) => {
+    context.queryClient.ensureQueryData(productsOptions);
+    return context.queryClient.ensureQueryData(articlesOptions);
+  },
   component: Index,
 });
 
@@ -20,6 +24,7 @@ const trust = [
 
 function Index() {
   const { data: products } = useSuspenseQuery(productsOptions);
+  const { data: articles } = useSuspenseQuery(articlesOptions);
   return (
     <>
       <section className="relative overflow-hidden">
@@ -97,7 +102,7 @@ function Index() {
 
       <Container className="py-20">
         <SectionTitle eyebrow="المعرفة والوقاية" title="مقالات تساعدك على الوقاية" />
-        <div className="grid gap-6 md:grid-cols-3">{posts.slice(0, 3).map((p) => <PostCard key={p.slug} post={p} />)}</div>
+        <div className="grid gap-6 md:grid-cols-3">{articles.slice(0, 3).map((p) => <PostCard key={p.slug} post={p} />)}</div>
       </Container>
 
       <Container>

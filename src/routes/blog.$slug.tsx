@@ -1,11 +1,14 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { posts, SITE } from "@/lib/data";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { SITE } from "@/lib/data";
+import { articlesOptions, articlesQuery, toArticle } from "@/lib/use-articles";
 import { Container, meta } from "@/components/site";
 import { PostCard } from "@/components/cards";
 
 export const Route = createFileRoute("/blog/$slug")({
-  loader: ({ params }) => {
-    const p = posts.find((x) => x.slug === params.slug);
+  loader: async ({ params, context }) => {
+    const rows = await context.queryClient.ensureQueryData(articlesQuery);
+    const p = rows.map(toArticle).find((x) => x.slug === params.slug);
     if (!p) throw notFound();
     return p;
   },
@@ -15,6 +18,7 @@ export const Route = createFileRoute("/blog/$slug")({
 
 function Article() {
   const p = Route.useLoaderData();
+  const { data: posts } = useSuspenseQuery(articlesOptions);
   const related = posts.filter((x) => x.slug !== p.slug).slice(0, 3);
   return (
     <article>
