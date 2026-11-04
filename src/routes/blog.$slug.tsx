@@ -1,7 +1,7 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { SITE } from "@/lib/data";
-import { articlesQuery, toArticle } from "@/lib/use-articles";
+import { articlesOptions, articlesQuery, toArticle } from "@/lib/use-articles";
 import { Container, meta } from "@/components/site";
 import { PostCard } from "@/components/cards";
 
