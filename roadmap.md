@@ -10,4 +10,6 @@ Admin modules for the pest-control site (each: DB table + admin page + storefron
 - [ ] Services module — services table + admin edit page; storefront service pages read live data
 - [ ] Customers/reviews/reports/settings — placeholder "قريباً" items in the admin sidebar
 - [ ] Email alerts to the business — blocked on a custom email domain (not yet configured)
-- [ ] Real business content — SITE placeholders (doctor name, phone, WhatsApp, email, address), real product photos, real prices/delivery fee
+- [x] Real business profile and contact content — doctor name, title, qualifications, experience, served sectors, phone/WhatsApp, email, and location updated
+- [ ] Doctor portrait — waiting for the real photo to replace the current image on the homepage and About page
+- [ ] Real product photos, real prices/delivery fee

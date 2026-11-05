@@ -65,8 +65,8 @@ export function Footer() {
         <FooterCol title="اطلب الآن" links={[["/booking", "احجز خدمة"], ["/booking", "اطلب معاينة"], ["/quote", "اطلب عرض سعر"], ["/consultation", "استشر الدكتور"]]} />
         <div className="space-y-2 text-sm opacity-90">
           <p className="mb-3 font-bold">تواصل</p>
-          <p className="flex items-center gap-2"><Phone className="size-4" /><span dir="ltr">{SITE.phone}</span></p>
-          <p className="flex items-center gap-2"><Mail className="size-4" />{SITE.email}</p>
+          <p className="flex items-center gap-2"><Phone className="size-4" /><a href={`tel:${SITE.phone.replace(/\s/g, "")}`} dir="ltr">{SITE.phone}</a></p>
+          <p className="flex items-center gap-2"><Mail className="size-4" /><a href={`mailto:${SITE.email}`}>{SITE.email}</a></p>
           <p className="flex items-center gap-2"><MapPin className="size-4" />{SITE.address}</p>
         </div>
       </div>

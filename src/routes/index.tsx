@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { ShieldCheck, Microscope, Building2, RefreshCcw, Stethoscope, MessageCircle, ArrowLeft } from "lucide-react";
-import { images, services, process, waLink } from "@/lib/data";
+import { doctorExperience, images, services, process, SITE, waLink } from "@/lib/data";
 import { productsOptions } from "@/lib/use-products";
 import { articlesOptions } from "@/lib/use-articles";
 import { Container, SectionTitle, meta } from "@/components/site";
@@ -78,11 +78,12 @@ function Index() {
       </section>
 
       <Container className="grid items-center gap-12 py-20 md:grid-cols-2">
-        <img src={images.doctor} alt="الدكتور" loading="lazy" width={960} height={1200} className="mx-auto aspect-[4/5] w-full max-w-md rounded-3xl object-cover" />
+        <img src={images.doctor} alt={SITE.name} loading="lazy" width={960} height={1200} className="mx-auto aspect-[4/5] w-full max-w-md rounded-3xl object-cover" />
         <div>
           <span className="eyebrow">عن الدكتور</span>
-          <h2 className="mt-3 text-3xl font-extrabold text-primary-deep md:text-4xl">استشارة متخصصة قبل أي معالجة</h2>
-          <p className="mt-4 text-muted-foreground">خبير في علم الحشرات ومكافحة الآفات، يقدم تشخيصًا دقيقًا وخطط مكافحة متكاملة للمنازل والمنشآت التجارية والصناعية.</p>
+          <h2 className="mt-3 text-3xl font-extrabold text-primary-deep md:text-4xl">{SITE.name}</h2>
+          <p className="mt-2 font-semibold text-primary">{SITE.title}</p>
+          <p className="mt-4 text-muted-foreground">متخصص في الإدارة المتكاملة للآفات بخبرة {doctorExperience}، يقدم تشخيصًا دقيقًا وخطط مكافحة للمنازل والمنشآت.</p>
           <div className="mt-6 flex flex-wrap gap-3">
             <Link to="/about" className="btn btn-outline">تعرف على الدكتور</Link>
             <Link to="/consultation" className="btn btn-primary">استشر الدكتور</Link>

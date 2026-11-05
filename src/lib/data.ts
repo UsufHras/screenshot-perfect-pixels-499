@@ -4,13 +4,23 @@ import products from "@/assets/products.jpg";
 import doctor from "@/assets/doctor.jpg";
 
 export const SITE = {
-  name: "د. [اسم الدكتور]",
-  brand: "عيادة مكافحة الآفات",
-  phone: "+20 100 000 0000",
-  whatsapp: "201000000000",
-  email: "info@example.com",
-  address: "القاهرة، مصر",
+  name: "د. محمود حسان",
+  title: "استشاري الإدارة المتكاملة للآفات",
+  brand: "الإدارة المتكاملة للآفات",
+  phone: "+20 100 960 1103",
+  whatsapp: "201009601103",
+  email: "mahmoudhassan151993@gmail.com",
+  address: "السادس من أكتوبر، مصر",
 };
+
+export const doctorQualifications = [
+  "بكالوريوس علوم زراعية – قسم الحشرات",
+  "ماجستير علوم زراعية – قسم الحشرات",
+  "دكتوراه العلوم الزراعية – قسم الحشرات",
+];
+
+export const doctorExperience = "١١ سنة";
+export const servedSectors = "مصانع غذائية • سلاسل تجارية • مطاعم • نوادٍ • كمبوندات سكنية • منازل وفلل";
 
 export const waLink = (text = "مرحبًا، أريد الاستفسار عن خدمات مكافحة الآفات") =>
   `https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent(text)}`;

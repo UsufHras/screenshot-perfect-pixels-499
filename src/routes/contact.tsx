@@ -16,8 +16,8 @@ function Contact() {
       <PageHero eyebrow="تواصل" title="تواصل معنا" subtitle="نسعد بالرد على استفساراتك في أسرع وقت." />
       <Container className="grid gap-8 py-14 lg:grid-cols-3">
         <div className="space-y-4">
-          {[{ i: Phone, l: "الهاتف", v: SITE.phone }, { i: Mail, l: "البريد", v: SITE.email }, { i: MapPin, l: "العنوان", v: SITE.address }].map(({ i: I, l, v }) => (
-            <div key={l} className="card-soft flex items-center gap-4 p-5"><I className="size-6 text-primary" /><div><p className="text-sm text-muted-foreground">{l}</p><p className="font-bold" dir="auto">{v}</p></div></div>
+          {[{ i: Phone, l: "الهاتف", v: SITE.phone, href: `tel:${SITE.phone.replace(/\s/g, "")}` }, { i: Mail, l: "البريد", v: SITE.email, href: `mailto:${SITE.email}` }, { i: MapPin, l: "العنوان", v: SITE.address }].map(({ i: I, l, v, href }) => (
+            <div key={l} className="card-soft flex items-center gap-4 p-5"><I className="size-6 text-primary" /><div><p className="text-sm text-muted-foreground">{l}</p>{href ? <a href={href} className="font-bold hover:underline" dir="auto">{v}</a> : <p className="font-bold" dir="auto">{v}</p>}</div></div>
           ))}
           <a href={waLink()} target="_blank" rel="noreferrer" className="btn btn-whatsapp w-full"><MessageCircle className="size-5" />راسلنا على واتساب</a>
         </div>

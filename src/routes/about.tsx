@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { GraduationCap, Target, Search, Lightbulb, ShieldCheck } from "lucide-react";
-import { images, SITE } from "@/lib/data";
+import { doctorExperience, doctorQualifications, images, servedSectors, SITE } from "@/lib/data";
 import { Container, meta } from "@/components/site";
 
 export const Route = createFileRoute("/about")({
@@ -8,7 +8,11 @@ export const Route = createFileRoute("/about")({
   component: About,
 });
 
-const stats = ["سنوات من الخبرة", "حالات تم التعامل معها", "عملاء", "منشآت تمت خدمتها"];
+const stats = [
+  { value: doctorExperience, label: "خبرة في الإدارة المتكاملة للآفات" },
+  { value: "بكالوريوس • ماجستير • دكتوراه", label: "علوم زراعية – قسم الحشرات" },
+  { value: "منازل ومنشآت", label: "قطاعات متنوعة" },
+];
 const why = [
   { i: Search, t: "تحديد الآفة بدقة", d: "التعرف على النوع الصحيح هو أساس اختيار العلاج." },
   { i: Target, t: "فهم المصدر والسلوك", d: "معرفة سبب الإصابة يمنع تكرارها." },
@@ -24,10 +28,10 @@ function About() {
         <div className="md:col-span-3 fade-up">
           <span className="eyebrow">عن الدكتور</span>
           <h1 className="mt-4 text-4xl font-extrabold text-primary-deep">{SITE.name}</h1>
-          <p className="mt-2 text-lg font-semibold text-primary">[المسمى المهني — مثال: استشاري علم الحشرات ومكافحة الآفات]</p>
-          <p className="mt-5 text-muted-foreground">[فقرة تعريفية عن الدكتور وفلسفته المهنية: المكافحة المتكاملة القائمة على العلم، مع الحرص على سلامة الإنسان والبيئة.]</p>
+          <p className="mt-2 text-lg font-semibold text-primary">{SITE.title}</p>
+          <p className="mt-5 text-muted-foreground">متخصص في الإدارة المتكاملة للآفات، بخبرة {doctorExperience} ومؤهلات أكاديمية في علوم زراعية – قسم الحشرات. يقدم تشخيصًا وخطط مكافحة متخصصة للمنازل والمنشآت.</p>
           <div className="mt-6 grid gap-3 sm:grid-cols-2">
-            {["[المؤهل العلمي الأول]", "[المؤهل العلمي الثاني]", "[شهادة أو عضوية مهنية]", "[مجال تخصص]"].map((q) => (
+            {doctorQualifications.map((q) => (
               <div key={q} className="flex items-center gap-2 rounded-xl bg-secondary p-3 text-sm font-semibold"><GraduationCap className="size-5 text-primary" />{q}</div>
             ))}
           </div>
@@ -36,10 +40,15 @@ function About() {
       </Container>
 
       <section className="border-y bg-card">
-        <Container className="grid grid-cols-2 gap-6 py-10 md:grid-cols-4">
-          {stats.map((s) => <div key={s} className="text-center"><p className="text-4xl font-extrabold text-primary">[ + ]</p><p className="mt-1 text-sm font-semibold text-muted-foreground">{s}</p></div>)}
+        <Container className="grid gap-6 py-10 sm:grid-cols-3">
+          {stats.map(({ value, label }) => <div key={label} className="text-center"><p className="text-2xl font-extrabold text-primary">{value}</p><p className="mt-2 text-sm font-semibold text-muted-foreground">{label}</p></div>)}
         </Container>
       </section>
+
+      <Container className="pt-12">
+        <p className="font-bold text-primary-deep">المنشآت والقطاعات التي نخدمها</p>
+        <p className="mt-2 text-muted-foreground">{servedSectors}</p>
+      </Container>
 
       <Container className="py-20">
         <h2 className="text-3xl font-extrabold text-primary-deep">لماذا تختار الاستشارة المتخصصة؟</h2>
