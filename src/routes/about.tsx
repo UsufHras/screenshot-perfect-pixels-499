@@ -10,7 +10,7 @@ export const Route = createFileRoute("/about")({
 
 const stats = [
   { value: doctorExperience, label: "خبرة في الإدارة المتكاملة للآفات" },
-  { value: "بكالوريوس • ماجستير • دكتوراه", label: "علوم زراعية – قسم الحشرات" },
+  { value: "دكتوراه", label: "علوم زراعية – قسم الحشرات" },
   { value: "منازل ومنشآت", label: "قطاعات متنوعة" },
 ];
 const why = [
