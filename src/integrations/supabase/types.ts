@@ -74,6 +74,7 @@ export type Database = {
           short: string
           slug: string
           sort_order: number
+          stock_quantity: number | null
           storage_note: string
           updated_at: string
           usage: string
@@ -93,6 +94,7 @@ export type Database = {
           short?: string
           slug: string
           sort_order?: number
+          stock_quantity?: number | null
           storage_note?: string
           updated_at?: string
           usage?: string
@@ -112,6 +114,7 @@ export type Database = {
           short?: string
           slug?: string
           sort_order?: number
+          stock_quantity?: number | null
           storage_note?: string
           updated_at?: string
           usage?: string

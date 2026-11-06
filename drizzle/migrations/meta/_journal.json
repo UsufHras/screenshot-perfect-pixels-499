@@ -36,6 +36,13 @@
       "when": 1793678437862,
       "tag": "0004_create_articles",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1793945017882,
+      "tag": "0005_add_product_inventory_quantity",
+      "breakpoints": true
     }
   ]
 }
