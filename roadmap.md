@@ -11,5 +11,5 @@ Admin modules for the pest-control site (each: DB table + admin page + storefron
 - [ ] Customers/reviews/reports/settings — placeholder "قريباً" items in the admin sidebar
 - [ ] Email alerts to the business — blocked on a custom email domain (not yet configured)
 - [x] Real business profile and contact content — doctor name, title, qualifications, experience, served sectors, phone/WhatsApp, email, and location updated
-- [ ] Doctor portrait — waiting for the real photo to replace the current image on the homepage and About page
+- [x] Doctor portrait — uploaded photo now appears on the homepage and About page
 - [ ] Real product photos, real prices/delivery fee

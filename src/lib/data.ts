@@ -1,7 +1,7 @@
 import hero from "@/assets/hero.jpg";
 import commercial from "@/assets/commercial.jpg";
 import products from "@/assets/products.jpg";
-import doctor from "@/assets/doctor.jpg";
+import doctorProfile from "@/assets/doctor-profile.jfif.asset.json";
 
 export const SITE = {
   name: "د. محمود حسان",
@@ -25,7 +25,7 @@ export const servedSectors = "مصانع غذائية • سلاسل تجاري�
 export const waLink = (text = "مرحبًا، أريد الاستفسار عن خدمات مكافحة الآفات") =>
   `https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent(text)}`;
 
-export const images = { hero, commercial, products, doctor };
+export const images = { hero, commercial, products, doctor: doctorProfile.url };
 
 export type Service = {
   slug: string; title: string; short: string; image: string; problems: string[];
